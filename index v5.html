@@ -1,0 +1,207 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Consultoria para bares e restaurantes - Reduza custos e otimize processos com nossa expertise em engenharia de produção.">
+  <title>SUWA CONSULTORIA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans&display=swap" rel="stylesheet">
+  <style>
+    /* Estilo para o botão flutuante de WhatsApp */
+    .whatsapp-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+    .whatsapp-button img {
+      width: 60px;
+      height: 60px;
+      transition: transform 0.2s;
+    }
+    .whatsapp-button img:hover {
+      transform: scale(1.1);
+    }
+    /* Estilo para melhorar legibilidade na Hero Section */
+    .hero-overlay {
+      background: rgba(0, 0, 0, 0.4); /* Camada escura com opacidade */
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-text {
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Sombra sutil no texto */
+    }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans">
+  <!-- Header -->
+  <header class="bg-[#2F4F4F] text-white py-4">
+    <div class="container mx-auto flex justify-between items-center px-4">
+      <h1 class="flex flex-col text-2xl font-bold font-['Montserrat'] uppercase">
+        SUWA CONSULTORIA
+        <span class="text-sm lowercase font-normal mt-1">food service</span>
+      </h1>
+      <nav>
+        <ul class="flex space-x-6">
+          <li><a href="#home" class="hover:text-orange-400">Início</a></li>
+          <li><a href="#sobre" class="hover:text-orange-400">Sobre</a></li>
+          <li><a href="#servicos" class="hover:text-orange-400">Serviços</a></li>
+          <li><a href="#depoimentos" class="hover:text-orange-400">Depoimentos</a></li>
+          <li><a href="#contato" class="hover:text-orange-400">Contato</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="home" class="bg-cover bg-center h-96 flex items-center" style="background-image: url('https://images.unsplash.com/photo-1552566626-52f8b828add9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')">
+    <div class="hero-overlay">
+      <div class="container mx-auto px-4 text-center hero-text">
+        <h2 class="text-5xl font-bold text-white font-['Montserrat'] mb-4">Transforme Seu Restaurante com Eficiência</h2>
+        <p class="text-xl text-white font-['Open+S ans'] mb-6">Reduza custos e otimize processos com nossa consultoria especializada em bares e restaurantes.</p>
+        <a href="#contato" class="bg-orange-500 text-white px-6 py-3 rounded-full font-['Montserrat'] hover:bg-orange-600">Entre em Contato</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sobre Section -->
+  <section id="sobre" class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <h3 class="text-3xl font-bold text-[#2F4F4F] font-['Montserrat'] text-center mb-8">Quem Somos</h3>
+      <div class="flex flex-col md:flex-row items-center">
+        <div class="md:w-1/2 mb-6 md:mb-0">
+          <img src="https://github.com/yoshioshubo/SUWACONSULTORIA/blob/main/IMAGENS/DSC_0570.jpg?raw=true" alt="Consultor em ação" class="rounded-lg shadow-lg">
+        </div>
+        <div class="md:w-1/2 md:pl-8">
+          <p class="text-lg text-gray-700 font-['Open+S ans'] mb-4">Sou engenheiro de produção com vasta experiência em consultoria para bares e restaurantes. Minha missão é ajudar seu negócio a reduzir custos, otimizar processos e aumentar a lucratividade, aplicando estratégias baseadas em análise de dados e gestão eficiente.</p>
+          <p class="text-lg text-gray-700 font-['Open+S ans']">Com uma abordagem prática e personalizada, transformamos desafios em oportunidades para o seu sucesso.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Serviços Section -->
+  <section id="servicos" class="py-16 bg-gray-100">
+    <div class="container mx-auto px-4">
+      <h3 class="text-3xl font-bold text-[#2F4F4F] font-['Montserrat'] text-center mb-8">Nossos Serviços</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+          <h4 class="text-xl font-bold text-[#2F4F4F] font-['Montserrat'] mb-4">Redução de Custos</h4>
+          <p class="text-gray-700 font-['Open+S ans']">Identificamos e eliminamos desperdícios, otimizando o uso de insumos e negociando com fornecedores.</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+          <h4 class="text-xl font-bold text-[#2F4F4F] font-['Montserrat'] mb-4">Otimização de Processos</h4>
+          <p class="text-gray-700 font-['Open+S ans']">Mapeamos e reestruturamos fluxos de trabalho para aumentar a eficiência na cozinha e no atendimento.</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+          <h4 class="text-xl font-bold text-[#2F4F4F] font-['Montserrat'] mb-4">Treinamento de Equipe</h4>
+          <p class="text-gray-700 font-['Open+S ans']">Capacitamos sua equipe para manter padrões elevados e melhorar a produtividade.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Depoimentos Section -->
+  <section id="depoimentos" class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <h3 class="text-3xl font-bold text-[#2F4F4F] font-['Montserrat'] text-center mb-8">O Que Nossos Clientes Dizem</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-gray-100 p-6 rounded-lg shadow-lg">
+          <p class="text-gray-700 font-['Open+S ans'] italic mb-4">"A consultoria reduziu nossos custos em 20% em apenas dois meses. Excelente trabalho!"</p>
+          <p class="text-[#2F4F4F] font-['Montserrat'] font-bold">João, Dono de Restaurante</p>
+        </div>
+        <div class="bg-gray-100 p-6 rounded-lg shadow-lg">
+          <p class="text-gray-700 font-['Open+S ans'] italic mb-4">"Nossa cozinha nunca foi tão organizada. A equipe está mais produtiva e os clientes, satisfeitos!"</p>
+          <p class="text-[#2F4F4F] font-['Montserrat'] font-bold">Maria, Gerente de Bar</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contato Section -->
+  <section id="contato" class="py-16 bg-[#2F4F4F] text-white">
+    <div class="container mx-auto px-4">
+      <h3 class="text-3xl font-bold font-['Montserrat'] text-center mb-8">Entre em Contato</h3>
+      <p class="text-lg font-['Open+S ans'] text-center mb-8">Pronto para transformar seu bar ou restaurante? Preencha o formulário abaixo ou envie uma mensagem!</p>
+      <div class="max-w-lg mx-auto">
+        <div class="space-y-4">
+          <input type="text" placeholder="Nome" class="w-full p-3 rounded-lg font-['Open+S ans']" readonly>
+          <input type="email" placeholder="E-mail" class="w-full p-3 rounded-lg font-['Open+S ans']" readonly>
+          <textarea placeholder="Mensagem" class="w-full p-3 rounded-lg font-['Open+S ans'] h-32" readonly></textarea>
+          <button class="bg-orange-500 text-white px-6 py-3 rounded-full font-['Montserrat'] hover:bg-orange-600 w-full" disabled>Enviar Mensagem</button>
+        </div>
+        <p class="text-center mt-4 font-['Open+S ans']">📧 contato@suwaconsultoria.com | 📱 (11) 98765-4321</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Botão Flutuante de WhatsApp -->
+  <div class="whatsapp-button">
+    <a href="https://wa.me/+5511987654321?text=Olá!%20Quero%20saber%20mais%20sobre%20a%20consultoria%20da%20Suwa%20Food%20Service!" target="_blank">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="rounded-full shadow-lg">
+    </a>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-4">
+    <div class="container mx-auto px-4 text-center">
+      <p class="font-['Open+S ans']">© 2025 SUWA CONSULTORIA. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Smooth scrolling for navigation
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
+</body>
+</html>
